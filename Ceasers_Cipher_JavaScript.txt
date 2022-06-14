@@ -1,0 +1,60 @@
+function rot13(str) {
+let result = [];                      				//Initialize return var, will hold all the shifted letters and other characters
+
+for(let i = 0; i < str.length; i++)   				//Iterate through each character in the string
+{
+  let currentVal = str[i];            				//New Var holding the current character
+
+  if(/\W/.test(currentVal) || /\d/.test(currentVal) || currentVal === "_") 
+                                      				//If the current value is not an alphaNumeric, such as punctuation, or if it IS a # or _ then push it to result
+  {
+    result.push(currentVal)          	 			//Push anything that isn't a letter...punctuation, numbers, or underscores automatically
+  }
+  else if(/\w/.test(currentVal) && /[^0-9]/.test(currentVal))  	//If the current character is a letter...
+  {                                        			//Make the each character uppercase to fit requirements and avoid matching issues, also easier ASCII range
+     currentVal = currentVal.toUpperCase();  			//Make the current letter Uppercase
+     currentVal = currentVal.charCodeAt(0);  			//Convert the current letter to ASCII Value
+
+     if(currentVal - 13 < 65)                			//If the current value is a number that will be brought below 65(or ASCII "A") by shifting down 13...
+    {           					//We would not be able to reconvert the number back into a letter after shifting since it would go beyond the ASCII capital letters
+                					//Therefore, we need to decrement to 65("A"), track the remaining shifts, and - that from 91, this ensures we can get 90("Z") as well
+      let remainingShifts = 13;             			//Initialize RemainingShifts, the remaining amount of required shifts for our current letter
+      while(currentVal !== 65)            			//So we start by decrementing current value until it reaches 65, then we log the remaining shifts needed
+      {
+        currentVal--;                     			//If currentVal isn't 65 decrement
+        remainingShifts--;                			//Decrement the remaining total shifts required every time currentVal is shifted down, starts at 13
+      }
+        currentVal = 91 - remainingShifts;  			//Now that currentVal is 65 and we know how many shifts are left over, we subtract the remaining from 91 
+        result.push(String.fromCharCode(currentVal)); 		//Now that the letter's # value has been shifted 13 times, push the letter version to result
+    }
+      else if(currentVal - 13 >= 65)        			//If the current value is a ASCII value or num that can be subtracted by 13 without becoming < 65
+    {
+        currentVal = currentVal - 13;                 		//Shift the Letter's ASCII value down 13  (ie: Z(90) - 13shifts = M(77))
+        result.push(String.fromCharCode(currentVal)); 		//Convert the shifted ASCII value back into a letter and then push that into result array
+    }
+  }
+}
+
+return result.join('');                  			//Join the coded array characters into a str once again and return the result
+}
+
+console.log(rot13("1-800" + " " + "V ybir...onpBA 365"))
+
+
+
+
+
+
+
+
+//Initialize currentCharacter variable and Loop through each character in str
+//If the character is punctuation, push
+//If the character is a number, push
+//If the character is a letter, encode it
+  //by converting it to its' ASCII value using charCodeAt()
+  //Subtract 13 from that ASCII value if possible
+  //Then convert the shifted ASCII value back into a letter and push that letter into a result array;
+//Then return the joined array of coded characters/punctuation
+
+
+

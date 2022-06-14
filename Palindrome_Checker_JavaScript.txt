@@ -1,0 +1,36 @@
+function palindrome(str) {
+  str = str		   //Str is equal to itself, but...		
+  .replace(/[\W_.]/gi, "") //Remove all unnecessary characters from str, leaving us with just letters
+  .toLowerCase();	   //Changes all of the remaining letters to lowercase, to avoid capitalization match errors
+ 
+
+  let lettersToCheck = str.split('');	//Breaks the lowercase letters into elements of an array, allowing us to manipulate more easily
+  let reversedStr = []			//Empty array that will contain the letters in above array, but backwards. Then compare
+
+//REVERSES THE LETTERS IN STR FOR NEW ARRAY
+  for(let i = lettersToCheck.length - 1 ; i >= 0; i--)
+  {
+    reversedStr.push(lettersToCheck[i]);
+  }
+//REVERSE LOOP
+
+//COMPARES BOTH ARRAYS AT SAME INDEX NOW THAT WE HAVE REVERSED VERSION
+  for(let i = 0; i < reversedStr.length; i++)	//For every letter in the str
+  {
+    if(lettersToCheck[i] === reversedStr[i])	//Compare the normal and reversed version at the same index
+    {
+      if (i === str.length - 1) 		//If they are the same AND this is the last letter, otherwise start over with next letter
+      {
+        return true;				//Return true this str is in fact, a palindrome
+      }
+    }
+    else					//If at any point the letters do not match each other
+    {
+      return false;				//Return false, this str is not a palindrome
+    }
+  }
+//LOOP
+
+}
+
+console.log(palindrome("A man, a plan, a canal. Panama"));

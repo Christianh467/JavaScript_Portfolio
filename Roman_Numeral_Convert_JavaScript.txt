@@ -1,0 +1,66 @@
+function convertToRoman(num) 
+{
+  //OBJECT LOOKUP
+  let lookUp =            
+  {
+    "M": 1000,
+    "CM": 900,
+    "D":  500,
+    "CD": 400,
+    "C":  100,
+    "XC":  90,
+    "L":   50,
+    "XL":  40,
+    "X":   10,
+    "IX":   9,
+    "V":    5,
+    "IV":   4,
+    "I":    1,
+  };
+  //OBJECT LOOKUP
+
+let keys = Object.keys(lookUp);   //Array of lookUps keys, allows me to iterate through them at will, avoiding auto sort systems
+let result = [];                  //Array that will contain the numeral character values
+
+//LOOP
+  for(let i = 0; i < keys.length; i)    //Iterate through each key in the Object lookUp, starting with largest #s, dont increase i each time
+  {
+    if(num - lookUp[keys[i]] >= 0)      //If the current keys value could be subtracted from num without bringing num < 0
+    {
+      num = num - lookUp[keys[i]]       //Do that and make num equal to value of the difference
+      result.push(keys[i]);             //Then push the numeral value of whatever that number was into our result arr
+                                        //Dont increase i because we want to see if this key can be subtracted again
+    }
+    else                                //If the current key can't be subtracted succesfully 
+    {
+      i++;                              //Increase i and move on to the next key
+    }
+  }
+//LOOP
+
+ return result.join('');
+}
+
+console.log(convertToRoman(2014));
+
+
+
+
+//PLAN
+//Create an object lookUp for numbers
+//Create an array of keys to iterate through objects props
+//Create empty result array 
+
+//LOOP
+//Create a function that subtracts the highest possible numeral associated num value from our current value without going negative, while num > 0
+//That numerals letter value is then pushed into result array, leaving us with remainder of our number, which will go through the same process. 
+//                               Ex: 67-50(push L)
+//                                   17-10(push X)
+//                                    7-5(push V)
+//                                    2-1(push I)
+//                                    1-1(push I)
+//                                    0 [L,X,V,I,I]
+//LOOP
+
+//Repeat the previous loop until num is equal to zero
+//Once all characters have been pushed to result, join and return result into a str

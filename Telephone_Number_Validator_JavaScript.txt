@@ -1,0 +1,24 @@
+function telephoneCheck(str) {
+  let arrayOfRegexes = 
+  [
+    /^\d\d\d-\d\d\d-\d\d\d\d$/,         //  817-888-8278
+    /^\(\d\d\d\)\d\d\d-\d\d\d\d$/,      // (817)888-8278 
+    /^\(\d\d\d\) \d\d\d-\d\d\d\d$/,     // (817) 888-8278
+    /^\d\d\d \d\d\d \d\d\d\d$/,         //  817 888 8278
+    /^\d\d\d\d\d\d\d\d\d\d$/,           //  8178888278
+    /^1 \d\d\d \d\d\d \d\d\d\d$/,     //1 817 888 8278
+    /^1 \d\d\d-\d\d\d-\d\d\d\d$/,     //1 817-888-8278
+    /^1 \(\d\d\d\) \d\d\d-\d\d\d\d$/, //1(817) 888-8278
+    /^1\(\d\d\d\)\d\d\d-\d\d\d\d$/,      //1(817)888-8278
+  ];
+
+  return (arrayOfRegexes.some((regex) => regex.test(str))); //As long as the str passes one of the regexes it's True
+}
+
+console.log(telephoneCheck("-1 (817) 888-8278"));
+
+//PLAN
+//Create an array of regexes for the str to be tested against
+//If str.test(oneOfTheRegexes) === true then return true
+//If str.test(noneOfTheRegexes) === true then return false
+//Probably using arrayOfRegexes.some
