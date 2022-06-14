@@ -1,0 +1,93 @@
+function checkCashRegister(price, cash, cid) //GIVEN A PRICE, PAYMENT, AND CASH IN DRAWER []...RETURN THE CASH DUE BACK WITH WHAT'S AVAILABLE
+{
+
+let totalCashInDrawer = cid.map((value) => value[1]).reduce((accum, val) => accum + val);      //The total amount of money in the register;
+let changeDue = cash - price;                                                                  //The remaining amount due back after a customer pays
+let result = {status: "CLOSED", change: []};                      //The Return Variable, fill its' change array with each denomination's sub-array
+
+//CHANGE VALUE LOOKUP
+  let changeLookUp =
+  {
+    "PENNY":          .01,
+    "NICKEL":         .05,
+    "DIME":           .1,
+    "QUARTER":        .25,
+    "ONE":           1,
+    "FIVE":          5,
+    "TEN":          10,
+    "TWENTY":       20,
+    "ONE HUNDRED": 100
+  }
+//CHANGE VALUE LOOKUP
+
+//IF DRAWER CONTAINS EXACT CHANGE, RETURN THE DRAWER
+  if(changeDue === totalCashInDrawer)       
+  {
+    result.change = [...cid];               
+  }
+
+//IF CHANGE DUE BACK IS MORE THAN TOTAL IN DRAWER...
+  else if(changeDue > totalCashInDrawer)    
+  {
+    result.status = 'INSUFFICIENT_FUNDS'   
+  }
+
+//IF ONLY ENOUGH CASH IN DRAWER?
+  else if(changeDue < totalCashInDrawer)                //IF we have enough TOTAL money in the drawer...attempt to give change
+  {
+    let changeKeys = Object.keys(changeLookUp);         //Create an array of keys for changeLookUp, so that we can iterate through each denom's value
+    result.status = 'OPEN';                             //The register is now..."OPEN"
+    
+    while(changeDue > 0)                                //WHILE we still owe change...
+    {
+      for(let i = changeKeys.length-1; i >= 0; i--)     //Iterate through every denomination...starting with the largest value, "One Hundred"
+      {         
+        let changeSubArray = [changeKeys[i], 0]         //The blueprint for the sub-arrays that will be pushed into result Object's "change" array
+                                                        //["denomination", total alotted value of our currently used denomination] ie: 2 20's = 40
+        while(changeDue - changeLookUp[changeKeys[i]] >= 0 && cid[i][1] > 0)
+                                                        //WHILE the current, largest possible, denomination's value can be -'ed from changeDue 
+                                                        //w/o giving back too much change & that denomination still exists in the register... 
+        {       
+          changeSubArray[1] += ((changeLookUp[changeKeys[i]]*100)/100); 
+                                                        //Add the individual value of the current denomination to total accumulated for it thus far
+                                                        // *100/100 keeps the decimals from getting rounded down to 0 initially  
+          cid[i][1] = cid[i][1] - changeLookUp[changeKeys[i]]                         //Removes the just-used bill from the register
+          changeDue = Math.round((changeDue - changeLookUp[changeKeys[i]])*100)/100;  //Subtract the current bill's value from changeDue
+        }
+        if(changeSubArray[1] !== 0)                     //IF the current sub array denomination was used for change at all...ie: totalVal isnt 0
+        {
+            result['change'].push(changeSubArray);      //Push The passed denomination's [name, and totalValThusFar] sub array
+        }
+      //ELSE...move on to the next denomination
+      }
+      //IF YOU HAVE GONE THROUGH EVERY DENOMINATION WITHOUT GETTING YOUR CHANGE IN FULL...                      
+      if(changeDue !== 0)             //This can happen if there is enough money in the drawer in theory...ie: a nickel but you need 4 pennies
+       {                                 
+         result.status = 'INSUFFICIENT_FUNDS';  
+         result.change = [];           //Replace any accumulated bills thus far with [], could return all available bills by deleting this line
+       }
+    }
+  }
+  return result;                 //Returns {status: status, change: [] || change:[['denomination', totalValue]['denomination', totalValue][etc.]]}
+}
+
+console.log(checkCashRegister(50.96, 78, [["PENNY", .09], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", .25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
+
+
+//PLAN
+//After getting total & payment calculate the change back needed
+//Determine how much money is inside of the cash register by iterating through each element and accumulating their values
+//Create the object that will be updated and then returned {status: null, change: []}
+//If there isn't enough money in the register to give change, change output object's status to insufficient, return with empty array
+//If there is exactly enough money in the register to give change, change output object's status to CLOSED and return with "change" array = the contents of cid parameter
+//If there is enough money in the register...attempt to give change
+//While we still owe change back or changeDue > 0...
+//Iterate through all of the denominations, starting with the largest, 
+//Create the subarray that will be repeatedly pushed into our outputObject's.change: [], ie change: [['null', 0],['null', 0]]
+//While this denomination's value can be removed from changeDue without making changeDue negative...and our drawer has this denomination in stock
+//Make this denomination's name our output subArray[0] and its' change value(.25$) is added to subArray[1](total)
+//Then subtract that denominations value from the drawer and total changeDue
+//Repeat until either the bill is too big to give change back with or until the drawer runs out of that bill
+//Once we are ready to move on and check the next denomination, push the subArray with our denomination and accumulated value into the outputObject's change: [] array
+//Then move on to the next denomination and continue the loop until changeDue === 0
+//If the program gets through the entire denomination list without finding the change it needs, the change isn't there and you should return "INSUFFICIENT_FUNDS"
