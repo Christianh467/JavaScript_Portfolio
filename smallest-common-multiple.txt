@@ -1,0 +1,25 @@
+function smallestCommons(arr) {
+  let found = false;
+  let numsToTest = [];
+  
+ arr.sort((a, b) => a - b);
+
+
+ for(let i = arr[0]; i <= arr[1]; i++)
+ {
+   numsToTest.push(i);
+ }
+ console.log(numsToTest)
+ 
+for(let i = 1; found === false; i++)
+{
+  if(numsToTest.every((num) => i % num === 0))
+  {
+    found = true;
+    console.log(i);
+    return i;
+  }
+}
+}
+
+smallestCommons([8,5]);

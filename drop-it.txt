@@ -1,0 +1,25 @@
+function dropElements(arr, func) {
+let result = [];
+let yesOrNo = false;
+
+  for(let i = 0; i < arr.length; i++)
+  {
+    if(func(arr[i]))
+    {
+      yesOrNo = true;
+      result.push(arr[i]);
+    }
+    else if(func(arr[i]) === false)
+    {
+      console.log(i)
+      if(yesOrNo === true)
+      {
+        result.push(arr[i]);
+      }
+    }
+  }
+  return result || [];
+
+}
+
+dropElements([1,2,3,9, 2], function(n) {return n > 2; });

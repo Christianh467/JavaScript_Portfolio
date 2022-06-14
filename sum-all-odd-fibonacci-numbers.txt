@@ -1,0 +1,36 @@
+function sumFibs(num) {
+  let currentNum = 1;
+  let prevNum = 0;
+  let currentNumbers = [];
+
+  // Generates the Original Fib Sequence
+  if(num === 0)
+  {
+    return 0;
+  }
+  else if(num === 1)
+  {
+    currentNumbers.push(currentNum);
+    currentNumbers.push(currentNum);
+    return currentNumbers.reduce((accum, num) => accum + num);
+  }
+  else
+  {
+    currentNumbers.push(currentNum);
+    for(let i = 0; currentNumbers[i] < num; i++)
+    {
+      currentNum += prevNum;
+      currentNumbers.push(currentNum);
+      console.log(currentNumbers)
+      prevNum = currentNumbers[i];
+    }
+  }
+
+  let filteredArray = currentNumbers.filter((oddNums) => oddNums % 2 == 1 && oddNums <= num);
+  let finalSum = filteredArray.reduce((accum, curr) => accum + curr);
+  return finalSum;
+
+}
+
+
+console.log(sumFibs(5));
