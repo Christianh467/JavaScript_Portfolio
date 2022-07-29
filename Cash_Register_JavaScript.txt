@@ -1,9 +1,12 @@
 function checkCashRegister(price, cash, cid) //GIVEN A PRICE, PAYMENT, AND CASH IN DRAWER []...RETURN THE CASH DUE BACK WITH WHAT'S AVAILABLE
 {
 
-let totalCashInDrawer = cid.map((value) => value[1]).reduce((accum, val) => accum + val);      //The total amount of money in the register;
-let changeDue = cash - price;                                                                  //The remaining amount due back after a customer pays
-let result = {status: "CLOSED", change: []};                      //The Return Variable, fill its' change array with each denomination's sub-array
+let totalCashInDrawer = cid.map((value) => value[1]).reduce((accum, val) => accum + val); 
+  //Create an array of all on-hand denominations total values, then add them all together using reduce to get the total amount of money in the drawer
+let changeDue = cash - price;                                                                  
+  //The remaining amount due back after a customer pays
+let result = {status: "CLOSED", change: []};                      
+  //The Return Variable, fill its' change array with each denomination's sub-array
 
 //CHANGE VALUE LOOKUP
   let changeLookUp =
@@ -32,7 +35,7 @@ let result = {status: "CLOSED", change: []};                      //The Return V
     result.status = 'INSUFFICIENT_FUNDS'   
   }
 
-//IF ONLY ENOUGH CASH IN DRAWER?
+//ONLY IF ENOUGH CASH IN DRAWER?
   else if(changeDue < totalCashInDrawer)                //IF we have enough TOTAL money in the drawer...attempt to give change
   {
     let changeKeys = Object.keys(changeLookUp);         //Create an array of keys for changeLookUp, so that we can iterate through each denom's value
@@ -64,7 +67,8 @@ let result = {status: "CLOSED", change: []};                      //The Return V
       if(changeDue !== 0)             //This can happen if there is enough money in the drawer in theory...ie: a nickel but you need 4 pennies
        {                                 
          result.status = 'INSUFFICIENT_FUNDS';  
-         result.change = [];           //Replace any accumulated bills thus far with [], could return all available bills by deleting this line
+         result.change = [];
+            //Replace any accumulated bills thus far with [], could just return all available bills by deleting this line but this was requirement for project
        }
     }
   }
@@ -76,7 +80,7 @@ console.log(checkCashRegister(50.96, 78, [["PENNY", .09], ["NICKEL", 2.05], ["DI
 
 //PLAN
 //After getting total & payment calculate the change back needed
-//Determine how much money is inside of the cash register by iterating through each element and accumulating their values
+//Determine how much money is inside of the cash register by iterating through each element in given array and accumulating their values
 //Create the object that will be updated and then returned {status: null, change: []}
 //If there isn't enough money in the register to give change, change output object's status to insufficient, return with empty array
 //If there is exactly enough money in the register to give change, change output object's status to CLOSED and return with "change" array = the contents of cid parameter
