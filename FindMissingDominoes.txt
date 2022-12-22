@@ -1,0 +1,28 @@
+console.log(solution(['00','10','02','30','04','05','21','13','41','15','61','22','32','42','25','26','33','43','53','36','44','54','46','55','65','66']))
+//06, 11
+
+function solution(A) {
+    let ArrayToCheck = [];
+
+    //Generate Domino Array
+    for(let i = 0; i < 7; i++){
+        for(let j = 0; j < 7; j++){
+            if(!ArrayToCheck.includes(`${i}${j}`) && !ArrayToCheck.includes(`${j}${i}`)){
+                ArrayToCheck.push(`${i}${j}`);
+            }
+        }
+    }
+
+    //Removes dominoes from array as it finds them, leaving you with the missing dominoes
+    A.forEach(function(elem){
+        let reverseElem = elem.split('').reverse().join('');
+        if(ArrayToCheck.includes(elem) || ArrayToCheck.includes(reverseElem)){
+            ArrayToCheck.splice(ArrayToCheck.indexOf(elem), 1);
+            ArrayToCheck.splice(ArrayToCheck.indexOf(reverseElem), 1);
+        }
+    })
+
+    return ArrayToCheck;
+}
+
+//SEEN A BETTER WAY TO DO THIS WITH (SETS) - GROUPS OF UNIQUE VALUES

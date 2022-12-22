@@ -1,0 +1,20 @@
+function sym(...args) {
+  let argument = args;                    //Creates an array of all the passed thru arguments in the function call
+                                            
+  function arrDiff(arr1, arr2)           //Compares two fed arr arguments
+  {
+    let result = [];                      //Resets result to equal a blank array
+    console.log(arr1,arr2);      
+
+    //For each number in each array, push current number if it can't be found in the other array or the result array
+    arr1.forEach(e => !arr2.includes(e) && !result.includes(e) ? result.push(e) : null);  
+    arr2.forEach(e => !arr1.includes(e) && !result.includes(e) ? result.push(e) : null);
+    //Return the result to the reduce function call, which will make another call with this resulting array and next arr argument if available
+    console.log(result);
+    return result;
+  }
+  
+  return argument.reduce(arrDiff); //Only returns a single output, will continue to feed the given array args to arrDiff until return a single array 
+}
+
+sym([1, 2, 3, 3], [5, 2, 1, 4], [2,6,8,10]);

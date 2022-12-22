@@ -1,0 +1,31 @@
+function pairwise(arr, arg) {
+  let newArr = [...arr]                                     //Allows us to manipulate arr without affecting original
+  let summedIndexes = [];                                   //Sum of Indices
+
+  if(arr.length === 0)                                      //If array empty return 0
+  {
+    return 0;
+  }
+
+  for(let i = 0; i < newArr.length; i++)                    //Iterate through values at each index, starting at 0
+  {
+    for(let j = i+1; j < newArr.length; j++)                //Then iterate through every OTHER index value 
+    {
+      if(newArr[i] + newArr[j] === arg)                     //If these values equal our argument
+      {
+        summedIndexes.push(newArr.indexOf(newArr[i]));      //Push the current index of first number to summedIndexes
+
+        newArr.splice(newArr.indexOf(newArr[i]), 1, NaN);   //Replace the current index with NaN so it can't be indexed again
+                                                            //This prevents issues with repeating numbers
+                                                            //Ex: [1,1,1,1,1], 2 : arr[i] & arr[j] would always index at 0
+
+        summedIndexes.push(newArr.indexOf(newArr[j]));      //Do the same thing for the second number index
+
+        newArr.splice(newArr.indexOf(newArr[j]), 1, NaN);
+      }
+    }
+  }
+  return summedIndexes.reduce((num, total) => num += total);	//Reduce the array of indices to the sum value of all indices
+}
+
+pairwise([1, 1, 1], 2);

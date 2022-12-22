@@ -1,0 +1,51 @@
+function updateInventory(current, restock) 
+{
+    let result = [...current];       //Output var consists of current stock...which gets manipulated + the new stock 
+
+    if(result.length === 0)         //If we dont have anything in stock currently, the new inventory becomes our current stock
+    {
+        result = restock;
+    }
+//For each item you need to restock, go through each item in our currentInventory
+    restock.forEach(newInvSubArray => current.map(curInvSubArray => 
+    {
+//If any of the currently stocked items match this item
+        if(curInvSubArray.indexOf(newInvSubArray[1]) > 0)     
+          {
+             curInvSubArray[0] += newInvSubArray[0];     //Add the amount being restocked to the amount of this item already in stock
+                                                         //Ex: Restock 2 bananas but we have 2 bananas in stock already so now we have 4 bananas
+             newInvSubArray[0] -= newInvSubArray[0];     //Subtract the items we added to our currStock from our restock inventory
+                                                         //Ex: If we restocked the 2 bananas, remove 2 bananas from restock inventory
+          } 
+//OR If the current item we have isn't in stock already, and still needs to be stocked
+            else if(current.indexOf(curInvSubArray) === current.length - 1 && newInvSubArray[0] !== 0)  
+            {
+                result.push(newInvSubArray);        	 //Push the current item and the quantity of it into currentInventory
+            }
+    }))
+//Now that we have the updated result list, sort that list alphabetically and return the result
+    return result.sort((a, b) => a[1] > b[1] ? 1 : a[1] < b[1] ? -1 : 0)  //Return the updated and sorted inventory
+}
+
+// Example inventory lists
+var curInv = [
+    [21, "Bowling Ball"],
+    [2, "Dirty Sock"],
+    [1, "Hair Pin"],
+    [5, "Microphone"]
+    ];
+
+var newInv = [
+    [2, "Hair Pin"],
+    [3, "Half-Eaten Apple"],
+    [67, "Bowling Ball"],
+    [7, "Toothpaste"]
+];
+
+console.log(updateInventory(curInv, newInv));
+
+
+//Iterate through each newInvsubArray
+//Compare each new subArray at index 1 or newInvSubArray[1] to every currInvSubArray at index [1] or currInvSubArray[1] to see if the current item is in stock already
+//If the product ISN'T already STOCKED, then push the current subArray to currentInv to add the new product to inventory
+//If the product IS STOCKED then find that index and add our newInvSubArray's[0] value to that currInvSubArray[0]
